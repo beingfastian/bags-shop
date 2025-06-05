@@ -1,0 +1,33 @@
+.people-review .swiper-pagination {
+  /* top: 50; */
+  position: relative !important;
+  margin-top: 25px;
+}
+.people-review .swiper-pagination .swiper-pagination-bullet {
+  width: 15px;
+  height: 15px;
+  background: #c4c4c4; /* Light gray */
+  border-radius: 50%;
+  transition: background 0.3s ease;
+}
+
+.people-review .swiper-pagination .swiper-pagination-bullet-active {
+  background: blue; /* Dark gray for active bullet */
+  width: 25px !important;
+  border-radius: 10px !important;
+  height: 10px !important;
+}
+
+.people-review .mySwiper .swiper-slide {
+  height: 180px !important;
+}
+
+.linear-primary {
+  border: 1px solid;
+  border-image-source: linear-gradient(
+    90deg,
+    #3734a9 0%,
+    rgba(55, 52, 168, 0) 93.75%
+  );
+  border-image-slice: 1;
+}
