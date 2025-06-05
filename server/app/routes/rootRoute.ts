@@ -1,0 +1,37 @@
+import { Router } from 'express';
+import categoryRouter from './categoryRoute.js';
+import productRouter from './productRoute.js';
+import variantRouter from './variantRoute.js';
+import userRouter from './userRoutes.js';
+import couponRouter from './couponRoute.js';
+import orderRouter from './orderRoute.js';
+import addressRouter from './addressRouter.js';
+import cartRouter from './cartRouter.js';
+import uploadRoute from './uploadRoute.js';
+import authRoute from './authRoutes.js';
+import heroRoute from './heroRoute.js';
+import paymentRoute from './paymentRoute.js';
+import dashboardRoute from './dashboardRoute.js';
+import publicRoute from './publicRoute.js';
+import visitorRoute from './visitorRoute.js';
+import Auth from '../middlewares/authentication.js';
+import backgroundRouter from './backgroundRemover.js';
+
+const router = Router();
+router.use('/user', userRouter);
+router.use(backgroundRouter)
+router.use('/hero', heroRoute);
+router.use('/auth', authRoute);
+router.use('/category', categoryRouter);
+router.use('/product', productRouter);
+router.use('/variant', variantRouter);
+router.use('/coupon', couponRouter);
+router.use(orderRouter);
+router.use('/address', addressRouter);
+router.use('/cart', Auth(), cartRouter);
+router.use('/upload', uploadRoute);
+router.use('/visitor', visitorRoute);
+router.use('/admin', dashboardRoute);
+router.use('/payment', paymentRoute);
+router.use(publicRoute);
+export default router;

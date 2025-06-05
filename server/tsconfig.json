@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "ES2020", // Or your desired target
+    "module": "NodeNext", // Must be NodeNext for compatibility with Node.js
+    "moduleResolution": "nodenext", // Required for ESM with Node.js
+    "strict": false,
+    "noEmit": false,
+    "noImplicitAny": false,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+
+    // "allowImportingTsExtensions": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./dist",
+    "rootDir": "./app",
+    "typeRoots": ["./node_modules/@types", "./app/types"]
+  },
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
+  },
+  "include": ["app/**/*.ts", "tests/**/*.js"]
+}
