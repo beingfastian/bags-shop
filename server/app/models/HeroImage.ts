@@ -17,22 +17,61 @@ export default (sequelize: Sequelize) => {
       },
       name: {
         type: DataTypes.STRING,
-        allowNull: true, // name can be null
+        allowNull: true,
         validate: {
-          notEmpty: true, // Ensures name is not an empty string if provided
+          notEmpty: true,
         },
       },
       type: {
         type: DataTypes.STRING,
-        allowNull: true, // name can be null
+        allowNull: true,
         defaultValue: 'hero',
       },
       image: {
         type: DataTypes.STRING,
-        allowNull: false, // image cannot be null
+        allowNull: false,
         validate: {
-          notEmpty: true, // Ensures image path or URL is not an empty string
+          notEmpty: true,
         },
+      },
+      // NEW TEXT FIELDS FOR DYNAMIC CONTENT
+      title: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        validate: {
+          len: [0, 255],
+        },
+      },
+      subtitle: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+        validate: {
+          len: [0, 1000],
+        },
+      },
+      button_text: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        validate: {
+          len: [0, 100],
+        },
+      },
+      button_link: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        validate: {
+          isUrl: true,
+        },
+      },
+      is_active: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+        allowNull: false,
+      },
+      sort_order: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+        allowNull: false,
       },
       createdAt: {
         type: DataTypes.DATE,
@@ -51,6 +90,12 @@ export default (sequelize: Sequelize) => {
       indexes: [
         {
           fields: ['name'],
+        },
+        {
+          fields: ['is_active'],
+        },
+        {
+          fields: ['sort_order'],
         },
       ],
     }

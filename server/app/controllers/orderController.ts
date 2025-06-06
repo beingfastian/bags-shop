@@ -1,4 +1,14 @@
 import { NextFunction, Request, Response } from 'express';
+// import {
+//   createOrderService,
+//   getAllOrdersService,
+//   getOrderByIdService,
+//   updateOrderStatusService,
+//   deleteOrderService,
+//   getOrdersByBuyerService,
+//   createUnauthorizedOrderService,
+// } from '../services/orderService.js';
+
 import {
   createOrderService,
   getAllOrdersService,
@@ -7,6 +17,7 @@ import {
   deleteOrderService,
   getOrdersByBuyerService,
   createUnauthorizedOrderService,
+  getTotalOrdersCountService, // Add this line
 } from '../services/orderService.js';
 
 export const createOrderController = async (
@@ -149,6 +160,21 @@ export const getBuyerController = async (
     const { id } = (req as any).payload;
     const orders = await getOrdersByBuyerService(id, req.query);
     res.status(200).json(orders);
+  } catch (error) {
+    next(error);
+  }
+};
+export const getTotalOrdersCountController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const totalOrders = await getTotalOrdersCountService();
+    res.status(200).json({
+      message: 'Total orders count retrieved successfully',
+      totalOrders,
+    });
   } catch (error) {
     next(error);
   }

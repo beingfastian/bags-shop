@@ -49,11 +49,11 @@ export default (sequelize: any) => {
         defaultValue: 'pending',
       },
       total_price: {
-        type: DataTypes.FLOAT,
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
       delivery_fee: {
-        type: DataTypes.FLOAT,
+        type: DataTypes.INTEGER,
         allowNull: true,
         defaultValue: 0,
       },
@@ -62,7 +62,7 @@ export default (sequelize: any) => {
         allowNull: true,
       },
       discount: {
-        type: DataTypes.FLOAT,
+        type: DataTypes.INTEGER,
         allowNull: true,
         defaultValue: 0,
       },

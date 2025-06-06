@@ -96,7 +96,7 @@ const OrderTable = () => {
           {orders.map((order: any) => (
             <tr
               onClick={() => onClick(order?.id)}
-              key={order.id}
+              key={order.id.substring(0, 8)}
               className="hover:bg-gray-50 border-b-[1px] border-gray-200 text-[#131523] cursor-pointer"
             >
               <td className="pl-4 ">
@@ -108,7 +108,7 @@ const OrderTable = () => {
                 />
               </td>
               <td className="py-2  text-sm font-semibold h-[52px]">
-                {order.order}
+                {order.order.substring(0, 8)}
               </td>
               <td className="py-2 px-4 text-sm text-gray-700">{order.date}</td>
               <td className="py-2 px-4 text-sm text-gray-700">

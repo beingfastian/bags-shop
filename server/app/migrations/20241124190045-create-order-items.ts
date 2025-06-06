@@ -42,7 +42,7 @@ module.exports = {
         comment: 'Quantity of the product variant being ordered',
       },
       unit_price: {
-        type: Sequelize.FLOAT,
+        type: Sequelize.INTEGER,
         allowNull: false,
         validate: {
           min: 0,
@@ -50,7 +50,7 @@ module.exports = {
         comment: 'Price of a single unit of the product variant',
       },
       total_price: {
-        type: Sequelize.FLOAT,
+        type: Sequelize.INTEGER,
         allowNull: false,
         validate: {
           min: 0,

@@ -9,6 +9,8 @@ import Filters from './components/Filters';
 import Pagination from './components/Pagination';
 import { Arrow } from './components/Icons';
 import { useRouter } from 'next/navigation';
+
+import StatsSection from '@/components/StatsSection';
 // import FeaturedHero from './components/FeaturedHero';
 import HeroSection from './components/HeroSection';
 import HomeFaq from './components/HomeFaq';
@@ -271,6 +273,12 @@ export default function Home() {
           {/* <img src="/scasmkaosmk ksdckaskcm.png" alt="" /> */}
           <BannerSilder/>
         </div>
+
+        {/* Add this new section */}
+        <div className="px-6 lg:px-32 mt-16">
+          <StatsSection />
+        </div>
+
 
         <div className="mt-10 ">
           <WhatWeDo />

@@ -46,12 +46,12 @@ module.exports = {
         comment: 'The status of the order',
       },
       total_price: {
-        type: Sequelize.FLOAT,
+        type: Sequelize.INTEGER,
         allowNull: false,
         comment: 'The total price of the order',
       },
       delivery_fee: {
-        type: Sequelize.FLOAT,
+        type: Sequelize.INTEGER,
         allowNull: true,
         default: 0,
         comment: 'The delivery fee of the order',
@@ -62,7 +62,7 @@ module.exports = {
         comment: 'tracking Id of the order',
       },
       discount: {
-        type: Sequelize.FLOAT,
+        type: Sequelize.INTEGER,
         defaultValue: 0,
         comment: 'The discount applied to the order (if any)',
       },

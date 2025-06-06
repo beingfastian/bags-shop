@@ -27,7 +27,7 @@ export default (sequelize: any) => {
         allowNull: false,
       },
       price: {
-        type: DataTypes.FLOAT,
+        type: DataTypes.INTEGER,
         allowNull: false,
         validate: {
           min: 0,
@@ -44,7 +44,7 @@ export default (sequelize: any) => {
         },
       },
       discount: {
-        type: DataTypes.FLOAT,
+        type: DataTypes.INTEGER,
         allowNull: true,
         validate: {
           min: 0,

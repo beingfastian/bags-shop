@@ -28,7 +28,7 @@ module.exports = {
         comment: 'coupon name',
       },
       discount_value: {
-        type: Sequelize.FLOAT,
+        type: Sequelize.INTEGER,
         allowNull: false,
         comment: 'The value of the discount (percentage or fixed amount)',
       },

@@ -65,7 +65,7 @@ export default (sequelize: any) => {
         type: DataTypes.INTEGER,
       },
       discount: {
-        type: DataTypes.FLOAT,
+        type: DataTypes.INTEGER,
         allowNull: true,
         validate: {
           min: 0,

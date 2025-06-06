@@ -183,7 +183,7 @@ const OrderHistory: React.FC<Props> = ({
                 Rs: {order.payment}
               </td>
               <td className="py-2 px-4 text-sm text-gray-600">
-                Rs: {parseFloat(order.payment) * order.quantity}
+                Rs: {parseInt(order.payment) * order.quantity}
               </td>
             </tr>
           ))}

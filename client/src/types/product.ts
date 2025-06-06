@@ -19,6 +19,8 @@ export interface Product {
   Category?: Category;
   createdAt: string;
   updatedAt: string;
+  discounted_price?: number; // Add this new field
+
 }
 
 export interface Variant {

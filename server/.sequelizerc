@@ -1,24 +1,7 @@
-// // .sequelizerc
-// const path = require('path');
-// const tsNode = require('ts-node');
-
-// tsNode.register({
-//   project: path.resolve('tsconfig.json'),
-// });
-
-// const config = path.resolve('app/config/config.ts');
-
-
-// module.exports = {
-//   'config': config,
-//   'models-path': path.resolve('./app/models'),
-//   'seeders-path': path.resolve('./app/seeders'),
-//   'migrations-path': path.resolve('./app/migrations'),
-// };
-
 const path = require('path');
+
 module.exports = {
-  'config': path.resolve('dist/config/config.js'),
+  'config': path.resolve('config/cli-config.cjs'),
   'models-path': path.resolve('./app/models'),
   'seeders-path': path.resolve('./app/seeders'),
   'migrations-path': path.resolve('./app/migrations'),

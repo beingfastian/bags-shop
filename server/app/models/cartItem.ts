@@ -61,11 +61,11 @@
 //         allowNull: false,
 //       },
 //       price: {
-//         type: DataTypes.FLOAT,
+//         type: DataTypes.INTEGER,
 //         allowNull: false,
 //       },
 //       total_price: {
-//         type: DataTypes.FLOAT,
+//         type: DataTypes.INTEGER,
 //         allowNull: false,
 //         defaultValue: 0,
 //       },
@@ -154,14 +154,14 @@ export default (sequelize: Sequelize) => {
         },
       },
       price: {
-        type: DataTypes.FLOAT,
+        type: DataTypes.INTEGER,
         allowNull: false,
         validate: {
           min: 0,
         },
       },
       total_price: {
-        type: DataTypes.FLOAT,
+        type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 0,
       },

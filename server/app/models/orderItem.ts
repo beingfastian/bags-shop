@@ -38,11 +38,11 @@ export default (sequelize: any) => {
         },
       },
       unit_price: {
-        type: DataTypes.FLOAT,
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
       total_price: {
-        type: DataTypes.FLOAT,
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
       createdAt: {

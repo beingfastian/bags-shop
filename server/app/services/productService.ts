@@ -62,6 +62,89 @@ export const addProduct = async ({
 };
 
 // Update the getAllProduct service to handle filters
+// export const getAllProduct = async ({
+//   gender,
+//   categories,
+//   search,
+//   minPrice,
+//   maxPrice,
+//   tags,
+//   page = 1,
+//   pageSize = 10,
+//   sortBy = 'createdAt', // Default sort by name
+//   sortOrder = 'DESC',
+// }: any) => {
+//   try {
+//     const { count, rows } = await Product.findAndCountAll({
+//       where: {
+//         ...(categories
+//           ? { category_id: { [Op.in]: categories.split(',') } }
+//           : {}),
+//         ...(gender
+//           ? {
+//               gender: {
+//                 [Op.in]: [
+//                   ...gender.split(',').map((g) => g.toLowerCase()),
+//                   'both',
+//                 ],
+//               },
+//             }
+//           : {}),
+//         ...(minPrice || maxPrice
+//           ? {
+//               price: {
+//                 ...(minPrice ? { [Op.gte]: parseInt(minPrice) } : {}),
+//                 ...(maxPrice ? { [Op.lte]: parseInt(maxPrice) } : {}),
+//               },
+//             }
+//           : {}),
+//         ...(tags?.length ? { tags: { [Op.overlap]: tags } } : {}),
+//         ...(search ? { name: { [Op.iLike]: `%${search}%` } } : {}),
+//       },
+//       include: [
+//         {
+//           model: Category,
+//           as: 'Category',
+//         },
+//         {
+//           model: Variant, // Include variants
+//           as: 'Variants',
+//           include: [
+//             {
+//               model: OrderItem,
+//               as: 'OrderItems',
+//             },
+//           ],
+//         },
+//       ],
+//       attributes: {
+//         include: [
+//           [
+//             Sequelize.literal(`(
+//               SELECT COALESCE(SUM(oi.quantity), 0) 
+//               FROM "Variants" AS v
+//               INNER JOIN "OrderItems" AS oi ON v.id = oi.variant_id
+//               WHERE v.product_id = "Product"."id"
+//             )`),
+//             'orders',
+//           ],
+//         ],
+//       },
+//       group: ['Product.id'],
+//       ...getPagination({ page, pageSize }),
+//       order: [
+//         [sortBy === 'orders' ? Sequelize.literal('orders') : sortBy, sortOrder],
+//       ],
+//     });
+
+//     return {
+//       data: rows, // The actual product data
+//       ...getPaginationMetadata({ page, pageSize }, count?.length),
+//     };
+//   } catch (error) {
+//     throw new AppError(error?.message, 400);
+//   }
+// };
 export const getAllProduct = async ({
   gender,
   categories,
@@ -93,8 +176,8 @@ export const getAllProduct = async ({
         ...(minPrice || maxPrice
           ? {
               price: {
-                ...(minPrice ? { [Op.gte]: parseFloat(minPrice) } : {}),
-                ...(maxPrice ? { [Op.lte]: parseFloat(maxPrice) } : {}),
+                ...(minPrice ? { [Op.gte]: parseInt(minPrice) } : {}),
+                ...(maxPrice ? { [Op.lte]: parseInt(maxPrice) } : {}),
               },
             }
           : {}),
@@ -128,6 +211,11 @@ export const getAllProduct = async ({
             )`),
             'orders',
           ],
+          // Add discounted price calculation as integer
+          [
+            Sequelize.literal(`FLOOR("Product"."price" * (1 - COALESCE("Product"."discount", 0) / 100.0))`),
+            'discounted_price',
+          ],
         ],
       },
       group: ['Product.id'],
@@ -145,8 +233,32 @@ export const getAllProduct = async ({
     throw new AppError(error?.message, 400);
   }
 };
-
 // Get product by ID
+// export const getProductById = async ({ id }: { id: string }) => {
+//   if (!id) {
+//     throw new AppError('Product ID is required', 400);
+//   }
+
+//   const product = await Product.findOne({
+//     where: { id },
+//     include: [
+//       {
+//         model: Variant, // Include variants
+//         as: 'Variants',
+//       },
+//       {
+//         model: Category,
+//         as: 'Category',
+//       },
+//     ],
+//   });
+
+//   if (!product) {
+//     throw new AppError('Product not found', 404);
+//   }
+
+//   return product;
+// };
 export const getProductById = async ({ id }: { id: string }) => {
   if (!id) {
     throw new AppError('Product ID is required', 400);
@@ -164,6 +276,15 @@ export const getProductById = async ({ id }: { id: string }) => {
         as: 'Category',
       },
     ],
+    attributes: {
+      include: [
+        // Add discounted price calculation as integer
+        [
+          Sequelize.literal(`FLOOR("Product"."price" * (1 - COALESCE("Product"."discount", 0) / 100.0))`),
+          'discounted_price',
+        ],
+      ],
+    },
   });
 
   if (!product) {
@@ -172,7 +293,6 @@ export const getProductById = async ({ id }: { id: string }) => {
 
   return product;
 };
-
 export const updateProduct = async ({
   id,
   name,

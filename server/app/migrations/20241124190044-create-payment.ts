@@ -43,7 +43,7 @@ module.exports = {
         type: Sequelize.DATE,
       },
       amount: {
-        type: Sequelize.FLOAT,
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
       transfer_screenshot: {

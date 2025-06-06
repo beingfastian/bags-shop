@@ -195,7 +195,7 @@ const AddProduct = () => {
         const productData = {
           name: data.productName,
           description: data.productDescription,
-          price: parseFloat(data.productPrice),
+          price: parseInt(data.productPrice),
           discount: data?.discountPrice || 0,
           category: selectedCategories,
           stock: parseInt(data?.quantity || '0'),
@@ -208,7 +208,7 @@ const AddProduct = () => {
             image: data[`image_${index}`],
             // Now assign the correct images for this variant
             images: variantImagesMap[index] || [],
-            price: parseFloat(data[`price_${index}`]),
+            price: parseInt(data[`price_${index}`]),
             discount: parseInt(data[`discount_${index}`] || '0', 10),
             material: data[`material_${index}`],
             comportment: data[`comportment_${index}`],

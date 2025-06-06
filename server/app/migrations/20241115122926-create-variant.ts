@@ -74,7 +74,7 @@ module.exports = {
         comment: 'Stock count for the variant',
       },
       discount: {
-        type: Sequelize.FLOAT,
+        type: Sequelize.INTEGER,
         allowNull: true,
         validate: {
           min: 0,

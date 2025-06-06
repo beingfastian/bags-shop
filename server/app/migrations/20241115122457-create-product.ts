@@ -27,7 +27,7 @@ module.exports = {
         comment: 'Name of the product',
       },
       price: {
-        type: Sequelize.FLOAT,
+        type: Sequelize,
         allowNull: false,
         validate: {
           min: 0,
@@ -54,7 +54,7 @@ module.exports = {
         comment: 'Available stock count for the product',
       },
       discount: {
-        type: Sequelize.FLOAT,
+        type: Sequelize.INTEGER,
         allowNull: true,
         validate: {
           min: 0,
