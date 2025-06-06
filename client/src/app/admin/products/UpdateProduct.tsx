@@ -31,7 +31,7 @@ const UpdateProducts: React.FC<Props> = ({ product, onClose, onSubmit }) => {
     const { name, value } = e.target;
 
     if (['stock', 'price', 'discount'].includes(name)) {
-      const numericValue = parseFloat(value);
+      const numericValue = parseInt(value);
       if (numericValue < 0 || isNaN(numericValue)) {
         setFormState((prev) => ({
           ...prev,

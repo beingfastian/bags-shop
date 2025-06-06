@@ -354,6 +354,15 @@ export const deleteOrderService = async (id: string) => {
   await order.destroy();
 };
 
+export const getTotalOrdersCountService = async (): Promise<number> => {
+  try {
+    const count = await Order.count();
+    return count;
+  } catch (error) {
+    throw new AppError('Failed to retrieve orders count', 500);
+  }
+};
+
 export const getOrdersByBuyerService = async (
   buyerId: string,
   {

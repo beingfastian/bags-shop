@@ -1,4 +1,15 @@
 import { Router } from 'express';
+// import {
+//   createOrderController,
+//   getAllOrdersController,
+//   getOrderByIdController,
+//   updateOrderStatusController,
+//   deleteOrderController,
+//   getOrdersByBuyerController,
+//   getBuyerController,
+// } from '../controllers/orderController.js';
+
+
 import {
   createOrderController,
   getAllOrdersController,
@@ -7,6 +18,7 @@ import {
   deleteOrderController,
   getOrdersByBuyerController,
   getBuyerController,
+  getTotalOrdersCountController, // Add this line
 } from '../controllers/orderController.js';
 import { validate, validateOrder } from '../middlewares/validate.js';
 import {
@@ -27,7 +39,7 @@ route.put(
   updateOrderStatusController
 );
 route.delete('/admin/order/:id', deleteOrderController);
-
+route.get('/admin/orders/count', getTotalOrdersCountController);
 route.post(
   '/buyer/order',
   Auth(null, false),

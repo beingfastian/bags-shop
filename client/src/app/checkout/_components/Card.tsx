@@ -7,7 +7,6 @@ interface Props {
   title: string;
   originalPrice: number;
   discountedPrice: number;
-  // rating: number;
 }
 
 function Card({ src, title, originalPrice, discountedPrice }: Props) {
@@ -36,12 +35,12 @@ function Card({ src, title, originalPrice, discountedPrice }: Props) {
         </div>
         <span className="flex items-center gap-5">
           <h1 className="text-[#64B496] text-base font-OpenSans">
-          RS.{hasDiscount ? discountedPrice?.toFixed(2) : originalPrice?.toFixed(2)}
+            Rs. {hasDiscount ? discountedPrice : originalPrice}
           </h1>
           {/* Show the original price with strikethrough if there's a discount */}
           {hasDiscount && (
             <h1 className="text-[#7A7A7A] text-[13px] font-OpenSans line-through">
-              RS.{originalPrice}
+              Rs. {originalPrice}
             </h1>
           )}
         </span>

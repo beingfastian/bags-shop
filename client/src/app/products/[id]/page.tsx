@@ -217,7 +217,13 @@ function ProductDetails() {
               style={{ backgroundImage: 'url(/bganimated.png)' }}
             />
           </div>
-
+          <button
+            type="button"
+            onClick={() => router.push('/checkout')}
+            className="px-3 py-2 bg-[#3734A9] hover:bg-[#514dc8] ease-in-out duration-300 flex items-center gap-2 rounded-md text-white font-semibold"
+            >
+              <span>Buy Now</span>
+          </button>
           <div className="w-full px-10 md:px-32 py-5 relative ">
             <h1 className="!z-50 italic font-bold text-xl text-[#3734A9] h-[42px] max-w-[517px]  border-b border-[#EBEEEF]">
             Product Detail:

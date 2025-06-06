@@ -48,7 +48,7 @@ export default (sequelize: any) => {
         allowNull: true,
       },
       amount: {
-        type: DataTypes.FLOAT,
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
       transfer_screenshot: {

@@ -56,7 +56,20 @@ export const getAllOrders = async ({
   });
   return response.data;
 };
-
+export const getTotalOrdersCount = async (): Promise<{ totalOrders: number; message: string }> => {
+  try {
+    // Use existing getAllOrders endpoint with minimal data
+    const response = await getAllOrders({ page: 1, pageSize: 1 });
+    return { 
+      totalOrders: response.totalItems || response.total || 0, 
+      message: 'Success' 
+    };
+  } catch (error) {
+    console.error('Failed to fetch orders count:', error);
+    throw error;
+  }
+};
+console.log("getTotalOrdersCount",getTotalOrdersCount)
 export const getOrdersByBuyer = async ({
   status,
   page,

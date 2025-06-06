@@ -155,10 +155,10 @@ const ProfessionalInvoice: React.FC<InvoiceProps> = ({
 }) => {
   const calculateTotals = (): Totals => {
     const subtotal = items.reduce(
-      (total, item) => total + item.quantity * item.price,
+      (total, item) => total + item.quantity * Math.floor(item.price),
       0
     );
-    const deliveryCharge = delivery_fee || 0;
+    const deliveryCharge = Math.floor(delivery_fee || 0);
     return {
       subtotal,
       deliveryCharge,
@@ -426,18 +426,6 @@ const ProfessionalInvoice: React.FC<InvoiceProps> = ({
                 />
               </div>
 
-              {/* <div className="mt-4 cursor-pointer">
-                <a 
-                  href={order.Payment.transfer_screenshot} 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="flex items-center justify-center w-full px-4 py-3 bg-[#3734A9] text-white rounded-xl hover:bg-[#545AED] transition-colors"
-                >
-                  <ImageIcon className="h-5 w-5 mr-2" />
-                  View Payment Screenshot
-                </a>
-              </div> */}
-
               {order.Payment.payment_method != 'cash_on_delivery' ? (
                 <div className="mt-4 cursor-pointer">
                   <a
@@ -479,48 +467,44 @@ const ProfessionalInvoice: React.FC<InvoiceProps> = ({
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {items.map((item) => (
-                  <tr
-                    key={item.id}
-                    className="text-gray-700 hover:bg-gray-50 transition-colors"
-                  >
-                    <td className="px-4 md:px-6 py-4 md:py-5">
-                      <div className="flex items-center space-x-4">
-                        <img
-                          src={item.image}
-                          alt={item.name}
-                          className="h-16 w-16 md:h-20 md:w-20 object-cover rounded-xl shadow-sm"
-                        />
-                        <span className="font-semibold text-gray-900 md:hidden">
+                {items.map((item) => {
+                  const unitPrice = Math.floor(item.price);
+                  const itemTotal = item.quantity * unitPrice;
+                  
+                  return (
+                    <tr
+                      key={item.id}
+                      className="text-gray-700 hover:bg-gray-50 transition-colors"
+                    >
+                      <td className="px-4 md:px-6 py-4 md:py-5">
+                        <div className="flex items-center space-x-4">
+                          <img
+                            src={item.image}
+                            alt={item.name}
+                            className="h-16 w-16 md:h-20 md:w-20 object-cover rounded-xl shadow-sm"
+                          />
+                          <span className="font-semibold text-gray-900 md:hidden">
+                            {item.name}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="px-4 md:px-6 py-4 md:py-5 hidden md:table-cell">
+                        <div className="font-semibold text-gray-900">
                           {item.name}
-                        </span>
-                      </div>
-                    </td>
-                    <td className="px-4 md:px-6 py-4 md:py-5 hidden md:table-cell">
-                      <div className="font-semibold text-gray-900">
-                        {item.name}
-                      </div>
-                      {/* {item.description && (
-                        <div className="text-sm text-gray-500 mt-1">{item.description}</div>
-                      )} */}
-                    </td>
-                    <td className="px-4 md:px-6 py-4 md:py-5 text-center font-medium">
-                      {item.quantity}
-                    </td>
-                    <td className="px-4 md:px-6 py-4 md:py-5 text-right">
-                      PKR{' '}
-                      {item.price.toLocaleString('en-US', {
-                        minimumFractionDigits: 2,
-                      })}
-                    </td>
-                    <td className="px-4 md:px-6 py-4 md:py-5 text-right font-semibold text-gray-900">
-                      PKR{' '}
-                      {(item.quantity * item.price).toLocaleString('en-US', {
-                        minimumFractionDigits: 2,
-                      })}
-                    </td>
-                  </tr>
-                ))}
+                        </div>
+                      </td>
+                      <td className="px-4 md:px-6 py-4 md:py-5 text-center font-medium">
+                        {item.quantity}
+                      </td>
+                      <td className="px-4 md:px-6 py-4 md:py-5 text-right">
+                        PKR {unitPrice.toLocaleString('en-US')}
+                      </td>
+                      <td className="px-4 md:px-6 py-4 md:py-5 text-right font-semibold text-gray-900">
+                        PKR {itemTotal.toLocaleString('en-US')}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -533,10 +517,7 @@ const ProfessionalInvoice: React.FC<InvoiceProps> = ({
               <div className="flex justify-between text-gray-600">
                 <span className="font-medium">Subtotal</span>
                 <span className="font-semibold">
-                  PKR{' '}
-                  {subtotal.toLocaleString('en-US', {
-                    minimumFractionDigits: 2,
-                  })}
+                  PKR {subtotal.toLocaleString('en-US')}
                 </span>
               </div>
               <div className="flex justify-between text-gray-600">
@@ -545,10 +526,7 @@ const ProfessionalInvoice: React.FC<InvoiceProps> = ({
                   Delivery Charges
                 </span>
                 <span className="font-semibold">
-                  PKR{' '}
-                  {deliveryCharge.toLocaleString('en-US', {
-                    minimumFractionDigits: 2,
-                  })}
+                  PKR {deliveryCharge.toLocaleString('en-US')}
                 </span>
               </div>
 
@@ -558,18 +536,15 @@ const ProfessionalInvoice: React.FC<InvoiceProps> = ({
                   Discount
                 </span>
                 <span className="font-semibold">
-                  PKR{' '}
-                  {(parseFloat(total as any) -
-                    parseFloat(order?.Payment?.amount)).toFixed(2)}
+                  PKR {Math.floor(total - parseInt(order?.Payment?.amount || '0')).toLocaleString('en-US')}
                 </span>
               </div>
 
               <div className="flex justify-between text-lg md:text-xl font-bold text-gray-900 pt-6 border-t">
                 <span className="flex items-center">
-                  {/* <DollarSign className="h-6 w-6 mr-2 text-[#3734A9]" /> */}
                   Total Amount
                 </span>
-                <span>PKR {order?.Payment?.amount}</span>
+                <span>PKR {parseInt(order?.Payment?.amount || '0').toLocaleString('en-US')}</span>
               </div>
             </div>
           </div>

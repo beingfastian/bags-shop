@@ -1,9 +1,6 @@
-
-
 import React, { useState } from 'react';
 import { MessageIcons } from './Icons';
 import { Product } from '@/types/product';
-import { applyDiscountToPrice } from '@/utils/discountUtils';
 import { FaShareAlt } from 'react-icons/fa';
 import {
   FacebookShareButton,
@@ -15,20 +12,16 @@ import {
   WhatsappIcon,
   EmailIcon,
 } from 'react-share';
-import { useClipboard } from 'use-clipboard-copy'; // To handle "Copy Link" functionality
+import { useClipboard } from 'use-clipboard-copy';
 import Modal from './Modal';
 import AddToCart from '@/components/addTocart';
-// import Modal from '@/components/Modal';
 
 type ProductInfoProps = {
-  // storeNumber: string;
   productName: string;
-  // price: string;
   data: Product | null | undefined;
   location: string;
   onContactUs: () => void;
   onChat: () => void;
-  // onAddToCart: () => void;
   onBuyNow: () => void;
   isPending?: boolean;
 };
@@ -42,24 +35,20 @@ const SkeletonBox: React.FC<{ className: string }> = ({ className }) => (
 );
 
 const ProductsInfo: React.FC<ProductInfoProps> = ({
-  // storeNumber,
   productName,
   data,
-  // location,
   onContactUs,
   onChat,
-  // onAddToCart,
-  // onBuyNow,
   isPending,
 }) => {
   const { copy } = useClipboard();
-
   const [isModalOpen, setModalOpen] = useState(false);
 
   const currentProductUrl =
     typeof window !== 'undefined' ? window.location.href : '';
 
   const toggleModal = () => setModalOpen((prev) => !prev);
+
   if (isPending) {
     return (
       <div className="w-full flex flex-col gap-y-6 animate-fadeIn">
@@ -76,19 +65,16 @@ const ProductsInfo: React.FC<ProductInfoProps> = ({
           </div>
         </div>
 
-        {/* Buttons Skeleton */}
         <div className="flex flex-col sm:flex-row gap-4">
           <SkeletonBox className="h-10 w-full rounded-full" />
           <SkeletonBox className="h-10 w-full rounded-full" />
         </div>
 
-        {/* Additional Info Skeleton */}
         <div className="max-w-2xl p-5 mx-auto rounded-lg bg-gray-100 space-y-4">
           <SkeletonBox className="h-6 w-1/3 rounded-md" />
           <SkeletonBox className="h-6 w-1/4 rounded-md" />
         </div>
 
-        {/* Add to Cart & Buy Now Buttons Skeleton */}
         <div className="flex flex-col sm:flex-row gap-4">
           <SkeletonBox className="h-12 w-full rounded-lg" />
           <SkeletonBox className="h-12 w-full rounded-lg" />
@@ -105,7 +91,6 @@ const ProductsInfo: React.FC<ProductInfoProps> = ({
           <p className="text-[#3734A9] text-xl font-bold mb-2">Variants</p>
           
           <div className='overflow-x-auto'>
-
            <table className="table-auto w-full border-collapse border border-gray-300">
           <thead>
             <tr className="bg-gray-100">
@@ -129,40 +114,45 @@ const ProductsInfo: React.FC<ProductInfoProps> = ({
             </tr>
           </thead>
           <tbody>
-            {data?.Variants?.map((item, index) => (
-              <tr key={index}>
-                <td className="border border-gray-300 px-4 py-2 text-sm text-gray-800">
-                  {item?.color}
-                </td>
-                <td className="border border-gray-300 px-4 py-2 text-[12px] text-gray-800 ">
-                  Rs.{' '}
-                  {applyDiscountToPrice(
-                    item?.price || data?.price,
-                    item?.discount || data?.discount
-                  )?.priceAfterDiscount.toFixed(2)}
-                  {item?.discount || data?.discount ? (
-                    <span className="text-[10px] text-red-500 line-through ml-2">
-                      Rs. {(item?.price || data?.price)?.toFixed(2)}
-                    </span>
-                  ) : null}
-                </td>
-                {item?.size && (
+            {data?.Variants?.map((item, index) => {
+              // Calculate discounted price for each variant
+              const variantPrice = item?.price || data?.price || 0;
+              const variantDiscount = item?.discount || data?.discount || 0;
+              const discountedPrice = variantDiscount > 0 
+                ? Math.floor(variantPrice * (1 - variantDiscount / 100))
+                : variantPrice;
+              
+              return (
+                <tr key={index}>
                   <td className="border border-gray-300 px-4 py-2 text-sm text-gray-800">
-                    {item?.size?.split(',')?.map((e, i) => (
-                      <p key={i} className="text-xs text-left">
-                        {e}
-                      </p>
-                    ))}
+                    {item?.color}
                   </td>
-                )}
-                <td className="border border-gray-300 px-4 py-2 text-sm text-gray-800">
-                  {item?.comportment }
-                </td>
-                <td className="border border-gray-300 px-4 py-2 text-sm text-gray-800">
-                {item?.material}
-                </td>
-              </tr>
-            ))}
+                  <td className="border border-gray-300 px-4 py-2 text-[12px] text-gray-800 ">
+                    Rs. {discountedPrice}
+                    {variantDiscount > 0 && (
+                      <span className="text-[10px] text-red-500 line-through ml-2">
+                        Rs. {variantPrice}
+                      </span>
+                    )}
+                  </td>
+                  {item?.size && (
+                    <td className="border border-gray-300 px-4 py-2 text-sm text-gray-800">
+                      {item?.size?.split(',')?.map((e, i) => (
+                        <p key={i} className="text-xs text-left">
+                          {e}
+                        </p>
+                      ))}
+                    </td>
+                  )}
+                  <td className="border border-gray-300 px-4 py-2 text-sm text-gray-800">
+                    {item?.comportment }
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2 text-sm text-gray-800">
+                  {item?.material}
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
         </div>
@@ -206,7 +196,6 @@ const ProductsInfo: React.FC<ProductInfoProps> = ({
           Share This Product
         </h2>
         <div className="flex justify-around text-2xl text-blue-600 gap-5">
-          {/* Facebook */}
           <FacebookShareButton
             url={currentProductUrl}
             className="cursor-pointer"
@@ -214,7 +203,6 @@ const ProductsInfo: React.FC<ProductInfoProps> = ({
             <FacebookIcon size={40} round />
           </FacebookShareButton>
 
-          {/* Twitter */}
           <TwitterShareButton
             url={currentProductUrl}
             className="cursor-pointer"
@@ -222,7 +210,6 @@ const ProductsInfo: React.FC<ProductInfoProps> = ({
             <TwitterIcon size={40} round />
           </TwitterShareButton>
 
-          {/* WhatsApp */}
           <WhatsappShareButton
             url={currentProductUrl}
             className="cursor-pointer"
@@ -230,7 +217,6 @@ const ProductsInfo: React.FC<ProductInfoProps> = ({
             <WhatsappIcon size={40} round />
           </WhatsappShareButton>
 
-          {/* Email */}
           <EmailShareButton
             url={currentProductUrl}
             subject="Check this out!"
@@ -240,7 +226,6 @@ const ProductsInfo: React.FC<ProductInfoProps> = ({
             <EmailIcon size={40} round />
           </EmailShareButton>
 
-          {/* Copy Link */}
           <button
             onClick={() => {
               copy(currentProductUrl);
