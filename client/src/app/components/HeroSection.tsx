@@ -6,7 +6,8 @@ import Image from 'next/image';
 import { NavBar } from './NavBar';
 import { useRouter } from 'next/navigation';
 import ImageSlider from './Slider';
-import { fetchHeroImages } from '@/services/HeroSectionUpload';
+import { fetchActiveHeroImages } from '@/services/HeroSectionUpload';
+import { HeroImage } from '@/types/types';
 
 function HeroSection() {
   const router = useRouter();
@@ -14,32 +15,33 @@ function HeroSection() {
   const [images, setImages] = useState<
     { id: number; src: string; alt: string }[]
   >([]);
+  const [heroData, setHeroData] = useState<HeroImage | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const getImages = async () => {
       try {
-        const response = await fetchHeroImages();
+        // UPDATED: Fetch only active hero images
+        const response = await fetchActiveHeroImages();
         const heroImages = response.filter(
-          (image: { type: string }) => image.type === "hero"
+          (image: HeroImage) => image.type === "hero"
         );
-        // const formattedImages = response.map(
-        //   (image: { id: number; image: string; name: string }) => ({
-        //     id: image.id,
-        //     src: image.image,
-        //     alt: image.name,
-        //   })
-        // );
+
+        // Format images for slider
         const formattedImages = heroImages.map(
-          (image: { id: number; image: string; name: string }) => ({
+          (image: HeroImage) => ({
             id: image.id,
             src: image.image,
-            alt: image.name,
+            alt: image.name || 'Hero Image',
           })
         );
-  
-        
+
         setImages(formattedImages);
+
+        // UPDATED: Get the first active hero for text content
+        if (heroImages.length > 0) {
+          setHeroData(heroImages[0]); // Use first active hero for text content
+        }
       } catch (error) {
         console.error('Failed to fetch hero images:', error);
       } finally {
@@ -51,11 +53,23 @@ function HeroSection() {
   }, []);
 
   const onClick = () => {
-    router?.push('/products');
+    // UPDATED: Use dynamic button link if available
+    const targetUrl = heroData?.button_link || '/products';
+    router?.push(targetUrl);
   };
+
+  // FALLBACK TEXT - Used when no dynamic content is available
+  const fallbackContent = {
+    title: "Uncompromising Quality, Unmatched Style Of Bag & Stationery",
+    subtitle: "Been easier!",
+    button_text: "Shop Collection",
+    description1: "Your one-stop shop for premium Bags and Stationery! Discover unmatched quality, stylish designs, and essential Stationery to elevate your daily life. Perfect for work, school, or leisure.",
+    description2: "Join Maaoz Official, Pakistan fastest-growing brand with over 10,000+ happy customers. Discover quality Bags and Stationery crafted for quality, style, and affordability."
+  };
+
   return (
     <div className="w-full flex flex-col">
-      <div className="relative w-full flex flex-col justify-center  bg-gradient-to-r from-[#b9e1ef] to-[#78c3df]">
+      <div className="relative w-full flex flex-col justify-center bg-gradient-to-r from-[#b9e1ef] to-[#78c3df]">
         <div className="">
           <NavBar />
         </div>
@@ -66,28 +80,36 @@ function HeroSection() {
                 <ServicesBannar />
               </div>
             </div>
+
+            {/* UPDATED: Dynamic Title Text */}
             <p className="w-full text-lg md:text-xl lg:text-3xl xl:text-4xl 2xl:text-[60px] font-light sm:leading-[70px] tracking-[-0.03em] text-left font-OpenSans">
-              Uncompromising Quality, Unmatched Style Of Bag & Stationery
+              {heroData?.title || fallbackContent.title}
             </p>
+
+            {/* UPDATED: Dynamic Subtitle Text */}
             <p className="text-[#3734A9] font-extrabold text-lg md:text-xl lg:text-3xl xl:text-4xl 2xl:text-[70px]">
-              Been easier!
+              {heroData?.subtitle || fallbackContent.subtitle}
             </p>
+
+            {/* UPDATED: Dynamic Description */}
             <p className="text-[#5B5B5B] text-xs sm:text-sm md:text-base lg:text-lg">
-              {/* There are many variations of passages of Lorem Ipsum available,
-              but the majority have suffered alteration in some form. */}
-              Your one-stop shop for premium Bags and Stationery! Discover
-              unmatched quality, stylish designs, and essential Stationery to
-              elevate your daily life. Perfect for work, school, or leisure.
+              {/* Show dynamic subtitle as description if available, otherwise use fallback */}
+              {heroData?.subtitle && heroData.subtitle !== fallbackContent.subtitle 
+                ? heroData.subtitle 
+                : fallbackContent.description1
+              }
             </p>
+
+            {/* UPDATED: Dynamic Button */}
             <div className="w-full" onClick={onClick}>
               <button className="bg-[#3734A9] rounded-[8px] py-2 my-2 px-2 md:px-6 text-[#FFFFFF] text-xs sm:text-sm md:text-base xl:text-lg font-semibold">
-                Shop Collection
+                {heroData?.button_text || fallbackContent.button_text}
               </button>
             </div>
+
+            {/* Static description - can be made dynamic too if needed */}
             <p className="text-[#5B5B5B] text-xs sm:text-sm md:text-base lg:text-lg">
-              Join Maaoz Official, Pakistan fastest-growing brand with over
-              10,000+ happy customers. Discover quality Bags and Stationery
-              crafted for quality, style, and affordability.
+              {fallbackContent.description2}
             </p>
           </div>
 

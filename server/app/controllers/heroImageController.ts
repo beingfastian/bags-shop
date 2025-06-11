@@ -23,6 +23,17 @@ export const getAllHeroImages = async (req: Request, res: Response) => {
   }
 };
 
+// Controller for fetching active hero images (for frontend display)
+export const getActiveHeroImages = async (req: Request, res: Response) => {
+  try {
+    const heroImages = await HeroImageService.getActiveHeroImages();
+    return res.status(200).json(heroImages);
+  } catch (error) {
+    console.error('Error fetching active hero images:', error);
+    return res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
 // Controller for fetching a single hero image by ID
 export const getHeroImageById = async (req: Request, res: Response) => {
   try {
@@ -41,14 +52,33 @@ export const getHeroImageById = async (req: Request, res: Response) => {
   }
 };
 
-// Controller for updating a hero image
+// Controller for updating a hero image - UPDATED TO HANDLE TEXT FIELDS
 export const updateHeroImage = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const { name, image } = req.body;
+    const { 
+      name, 
+      image, 
+      title, 
+      subtitle, 
+      button_text, 
+      button_link, 
+      is_active, 
+      sort_order 
+    } = req.body;
+    
     const updatedHeroImage = await HeroImageService.updateHeroImage(
       Number(id),
-      { name, image }
+      { 
+        name, 
+        image, 
+        title, 
+        subtitle, 
+        button_text, 
+        button_link, 
+        is_active, 
+        sort_order 
+      }
     );
 
     if (!updatedHeroImage) {

@@ -35,7 +35,7 @@ import AWS from 'aws-sdk';
 import multer from 'multer';
 
 export const s3 = new AWS.S3({
-  endpoint: 'https://s3.maaozofficialstore.shop',
+  endpoint: 'http://localhost:4000',
   accessKeyId: 'wp5tO93cdLcdM0qiT2ex',
   secretAccessKey: 'wZd8NESMHOeBaojeFELP30eHAmCsVUbb4pDvzOp2',
   s3ForcePathStyle: true,

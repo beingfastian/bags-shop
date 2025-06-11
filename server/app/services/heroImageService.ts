@@ -1,10 +1,16 @@
 import { HeroImage } from '../models/index.js';
 
-// Service to create a new hero image
+// Service to create a new hero image - UPDATED TO HANDLE TEXT FIELDS
 export const createHeroImage = async (data: {
-  name: string;
+  name?: string;
   image: string;
-  type: string;
+  type?: string;
+  title?: string;
+  subtitle?: string;
+  button_text?: string;
+  button_link?: string;
+  is_active?: boolean;
+  sort_order?: number;
 }) => {
   const heroImage = await HeroImage.create(data);
   return heroImage;
@@ -12,7 +18,18 @@ export const createHeroImage = async (data: {
 
 // Service to fetch all hero images
 export const getAllHeroImages = async () => {
-  const heroImages = await HeroImage.findAll();
+  const heroImages = await HeroImage.findAll({
+    order: [['sort_order', 'ASC'], ['createdAt', 'DESC']]
+  });
+  return heroImages;
+};
+
+// Service to fetch active hero images only
+export const getActiveHeroImages = async () => {
+  const heroImages = await HeroImage.findAll({
+    where: { is_active: true },
+    order: [['sort_order', 'ASC'], ['createdAt', 'DESC']]
+  });
   return heroImages;
 };
 
@@ -22,10 +39,19 @@ export const getHeroImageById = async (id: string) => {
   return heroImage;
 };
 
-// Service to update a hero image
+// Service to update a hero image - UPDATED TO HANDLE TEXT FIELDS
 export const updateHeroImage = async (
   id: number,
-  data: { name?: string; image?: string }
+  data: { 
+    name?: string; 
+    image?: string;
+    title?: string;
+    subtitle?: string;
+    button_text?: string;
+    button_link?: string;
+    is_active?: boolean;
+    sort_order?: number;
+  }
 ) => {
   const heroImage = await HeroImage.findOne({ where: { id } });
   if (!heroImage) {
